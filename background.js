@@ -3,4 +3,3 @@ chrome.runtime.onMessage.addListener(function(msg,sender,sq){
     chrome.tabs.sendMessage(tabs[0].id, {"website":tabs[0].url});
   });
 });
-//
