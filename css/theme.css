@@ -1,0 +1,136 @@
+#Aho-sendbox {
+    box-sizing: content-box;
+    text-align: left;
+    padding-top: 10px;
+    background-color: white;
+    width: 100%;
+    height: 25%;
+}
+#Aho-commentbox {
+  box-sizing: content-box;
+  overflow: auto;
+  background-color: white;
+  border-top-style: groove;
+  border-top-width: 1px;
+  border-top-width: #888888;
+  width: 100%;
+  height: 75%;
+}
+#Aho-textarea {
+  width: 94%;
+  height:60%;
+  background-color: white;
+  padding: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 5px;
+  border-style: groove;
+  border-color: blue;
+  border-width: 1px;
+  outline:none;
+  font-size: 24px;
+  overflow-y: auto;
+}
+#Aho-textarea p {
+  margin-top: 3px;
+  margin-bottom: 3px;
+  font-size: 24px;
+}
+#Aho-textarea:focus {
+  border-width: 1.5px;
+}
+#Aho-btn-send {
+  cursor: pointer;
+  color: white;
+  background-color: #337ab7;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-style: none;
+  border-radius: 3px;
+  box-shadow: 0.5px 1px #888888;
+  float: right;
+  margin-top: 20px;
+  margin-right: 3%;
+}
+#Aho-btn-send:hover{
+  background-color:#286090;
+}
+#Aho-sidebtn{
+  box-sizing: content-box;
+  height: 100px;
+  padding-top: 40px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border-right-style: groove;
+  border-right-color: #888888;
+  border-right-width:1px;
+  border-top-style: groove;
+  border-top-color: #888888;
+  border-top-width:1px;
+  border-bottom-style: groove;
+  border-bottom-color: #888888;
+  border-bottom-width:1px;
+
+}
+#Aho-sideview{
+  border-right-style: groove;
+  border-right-color: #888888;
+  border-right-width:1px;
+}
+.Aho-comment {
+    text-align: left;
+    overflow: hidden;
+    display: -webkit-inline-box;
+    min-height: 100px;
+    width: 100%;
+    border-color: white;
+    border-bottom-style: groove;
+    border-bottom-width: 1px;
+    border-top-color: #888888;
+}
+.Aho-comment p {
+  margin-top: 0px;
+}
+.Aho-profileimg {
+    text-align: center;
+    height: 100px;
+    width: 20%;
+    padding-left: 5px;
+    padding-top: 10px;
+    background-color: white;
+}
+.Aho-comment-vote {
+    padding-top: 5px;
+    width: 18%;
+    height: 100px;
+    text-align: -webkit-center;
+    background-color: white;
+}
+
+.Aho-comment-context {
+    padding-left: 3px;
+    height: 100px;
+    width: 60%;
+    background-color: white;
+}
+p.Aho-username-p {
+    overflow: hidden;
+    font-size: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+p.Aho-comment-p {
+    overflow: hidden;
+    font-size: 15px;
+}
+img.Aho-votebtn {
+    width: 35px;
+    margin-left: auto;
+    margin-right: auto;
+    cursor: pointer;
+}
+p.Aho-likenumber {
+    margin-bottom: 0;
+}
