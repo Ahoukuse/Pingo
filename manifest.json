@@ -31,6 +31,7 @@
     "permissions": [
           "tabs",
           "bookmarks",
-          "activeTab"
+          "activeTab",
+          "https://api.ahhhh.com.cn/"
     ]
 }

@@ -53,16 +53,28 @@ $(function() {
   chrome.runtime.sendMessage({"code":"100"},function (response){});
   chrome.runtime.onMessage.addListener(function(msg,sender,sq){
     console.log(msg["website"]);
-    addComment("Ahoukuseeeee",msg["website"],"99");
+    //addComment("Ahoukuseeeee",msg["website"],"99");
+    var xhr = new XMLHttpRequest();
+    var url = "https://api.ahhhh.com.cn/getcomment?website="+msg["website"];
+    xhr.open("GET",url, true);
+    xhr.send();
+    xhr.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var res = JSON.parse(xhr.responseText);
+        console.log(url);
+        console.log(res);
+        if (res["status"]=="200") {
+          for (var i = 0; i < res["comment"].length; i++) {
+            addComment(res["comment"][i]["user"],res["comment"][i]["context"],res["comment"][i]["likenumb"]);
+          }
+        }
+        else if (res["status"]=="404") {
+          var notfound = $("<p class='Aho-warning-text'>啥都没得...</p>");
+          notfound.appendTo(commentbox);
+        }
+      }
+    };
   });
-  addComment("Ahoukuse","Hello","99");
-  addComment("Ahoukuse","Hello","99");
-  addComment("Ahoukused","Hello","99");
-  addComment("Ahoukused","Hello","99");
-  addComment("Ahoukused","Hello","99");
-  addComment("Ahoukused","Hello","99");
-  addComment("Ahoukused","Hello","99");
-  addComment("Ahoukused","Hello","99");
 
   textarea.prependTo(sendbox);
 

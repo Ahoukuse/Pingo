@@ -134,3 +134,9 @@ img.Aho-votebtn {
 p.Aho-likenumber {
     margin-bottom: 0;
 }
+
+p.Aho-warning-text {
+    padding-top: 10px;
+    font-size: 30px;
+    text-align: -webkit-center;
+}
