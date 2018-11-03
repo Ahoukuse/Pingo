@@ -17,7 +17,7 @@
   height: 75%;
 }
 #Aho-textarea {
-  width: 94%;
+  width:  94%;
   height:60%;
   background-color: white;
   padding: 5px;
@@ -25,7 +25,7 @@
   margin-right: auto;
   border-radius: 5px;
   border-style: groove;
-  border-color: blue;
+  border-color: #e5e9ef;
   border-width: 1px;
   outline:none;
   font-size: 24px;
@@ -37,7 +37,12 @@
   font-size: 24px;
 }
 #Aho-textarea:focus {
-  border-width: 1.5px;
+  border-width: 1px;
+  border-color: blue;
+}
+#Aho-textarea:hover {
+  border-width: 1px;
+  border-color: blue;
 }
 #Aho-btn-send {
   cursor: pointer;
@@ -132,11 +137,48 @@ img.Aho-votebtn {
     cursor: pointer;
 }
 p.Aho-likenumber {
+    color: #636363;
     margin-bottom: 0;
+    font-size: 25px;
 }
 
 p.Aho-warning-text {
     padding-top: 10px;
     font-size: 30px;
     text-align: -webkit-center;
+}
+.Aho-like {
+  width: 0px;
+  height: 0px;
+  border-top: 32px solid transparent;
+  border-bottom: 32px solid transparent;
+  border-left:55.36px solid yellow;
+}
+.Aho-unlike {
+  cursor: pointer;
+  width: 0px;
+  height: 0px;
+  border-right: 15px solid transparent;
+  border-top: 15px solid #c9cbcf;
+  border-left: 15px solid transparent;
+  border-bottom-width: 0px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.Aho-like {
+  cursor: pointer;
+  width: 0px;
+  height: 0px;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid #c9cbcf;
+  border-left: 15px solid transparent;
+  border-top-width: 0px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+.Aho-liked {
+  border-bottom: 15px solid #9999ff;
+}
+.Aho-unliked {
+  border-top: 15px solid #9999ff;
 }

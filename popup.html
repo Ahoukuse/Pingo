@@ -4,34 +4,37 @@
     <meta charset="utf-8">
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/popup.js"></script>
-    <script src="js/main.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/maintheme.css">
-    <link rel="stylesheet" type="text/css" href="css/theme.css">
+    <script src="js/Aho-main.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/popuptheme.css">
+    <link rel="stylesheet" type="text/css" href="css/Aho-theme.css">
     <title>popup</title>
   </head>
   <body>
     <div id="container">
       <div id="list" style="width:100px;">
-        
+
       </div>
     </div>
-    <div id="HeiHeiView" style="display:none; width:100px;">
-      <button id="clickme" type="button" name="button">快去!</button>
+    <div id="LogView" class="" style="display:none; width:300px;height:400px;">
+        <div class="input-text" style="height:30px;width:500px">
+          <label  class="label-halt">用户名</label>
+          <input id="username" type="text" name="" value="">
+        </div>
+        <div class="input-text" style="height:30px;width:500px">
+          <label  class="label-halt">密码</label>
+          <input id="password" type="password" name="" value="">
+        </div>
+        <div class="bottom-div" style="padding-top:30px;display:inline-flex;">
+          <div id="loginbtn" class="bottom-float" style="margin-right:2px;">
+            <a href="#">登录噜噜</a>
+            <div class="float" ></div>
+            <div class="float-out"></div>
+          </div>
+          <button type="button" name="button">注册</button>
+        </div>
     </div>
-    <div id="BookmarksView" style="display:none; width:300px;">
-      <div class="container">
-        <div class="input-text" style="height:30px;width:150px">
-          <label  class="label-halt">书签名</label>
-          <input id="BookmarksTitle" type="text" name="" value="">
-        </div>
-        <div class="input-text" style="height:30px;width:150px">
-          <label class="label-halt">链接地址</label>
-          <input id="BookmarksUrl" type="text" name="" value="">
-        </div>
-        <div class="" style="padding-top:5px;">
-          <button id="finish" type="button" name="button">完成</button>
-        </div>
-      </div>
+    <div id="userdash" style="display:none; width:300px;height:400px;">
+      <button id="logout" type="button" name="button">登出</button>
     </div>
   </body>
 </html>

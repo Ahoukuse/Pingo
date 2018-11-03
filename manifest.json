@@ -32,6 +32,8 @@
           "tabs",
           "bookmarks",
           "activeTab",
-          "https://api.ahhhh.com.cn/"
+          "storage",
+          "https://api.ahhhh.com.cn/",
+          "http://localhost:2333/"
     ]
 }
