@@ -6,3 +6,54 @@ p {
 p:hover {
   background-color: #888888;
 }
+
+#usericon {
+  height: 60px;
+  width: auto;
+}
+
+.dash-head {
+  height: 130px;
+  background-color: skyblue;
+}
+.dash-icon {
+    z-index: 2;
+    position: absolute;
+    top: 110px;
+    width: 300px;
+    text-align: -webkit-center;
+}
+.icon {
+    background-color: white;
+    width: 62px;
+    border-radius: 7px;
+}
+.userlabel label {
+  height: 10px;
+  font-size: 30px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.userlabel {
+    position: relative;
+    top: -5px;
+}
+.dash-table {
+    text-align: -webkit-center;
+    padding-top: 210px;
+    background-color: #eeeeed;
+    padding-bottom: 10px;
+}
+.black-btn {
+  width: 32px;
+  height: 32px;
+  background-image:url("/img/icons8-long-arrow-left-32.png");
+  background-position:center;
+  background-repeat: no-repeat;
+  background-color: inherit;
+  border-style: none;
+}
+.black-btn:hover{
+  background-color: inherit;
+  box-shadow: 0px 0px 0px white;
+}

@@ -28,14 +28,14 @@ class MainListView extends View {
     for (var i = 0; i < this.ItemArray.length; i++) {
       //let View = $("#"+ViewArray[i].ViewLocal);
       let Pointer = this.ItemArray[i];
-      if($("#showusername").length == 0) {
+      if($("#"+Pointer.ViewName).length == 0) {
         let prediv = $("<div></div>");
         let element = $("<p></p>");
         element.html(Pointer.ViewName);
-        element.attr("id","showusername");
+        element.attr("id",Pointer.ViewName);
         element.appendTo(prediv);
         prediv.appendTo(pre);
-        $("#showusername").on("click",{"initor":Pointer.Init,"divlocal":Pointer.ViewLocal},function(event){
+        $("#"+Pointer.ViewName).on("click",{"initor":Pointer.Init,"divlocal":Pointer.ViewLocal},function(event){
           event.data.initor();
           pre.css("display","none");
           $("#"+event.data.divlocal).css("display","block");
@@ -44,7 +44,7 @@ class MainListView extends View {
       else {
         console.log("nonn");
 
-        $("#showusername").text(Pointer.ViewName);
+        $("#"+this.ViewName).text(Pointer.ViewName);
       }
     }
   }
@@ -84,25 +84,45 @@ class userView extends View {
     super(ViewName,ViewLocal)
   }
   Init(){
+    chrome.storage.sync.get(['username'], function(result){
+      $("#usernamelabel").text(result["username"]);
+    });
     $("#logout").on("click",{"view":this.ViewLocal},function (event) {
       chrome.storage.sync.remove(["username","id"]);
       $("#userdash").css("display","none");
       chrome.storage.sync.get(['username'], function(result) {
-        if (result["username"]===undefined) {
-          let logview = new LogView("logview","LogView");
-          logview.Init();
-        }
-        else{
-          let user = new userView(result["username"],"userdash");
-          let MainList = new MainListView("MainList","MainList","list");
-          MainList.CreateItem(user);
-          MainList.Init();
-        }
+        reflashList(result);
+      });
+    });
+    $("#black-btn").on("click",{"view":this.ViewLocal},function (event) {
+      console.log(event.data);
+      $("#userdash").css("display","none");
+      chrome.storage.sync.get(['username'], function(result) {
+        reflashList(result);
       });
     });
   }
+  Quit(){
+
+  }
+}
+function reflashList(result) {
+  if (result["username"]===undefined) {
+    let logview = new LogView("logview","LogView");
+    logview.Init();
+  }
+  else{
+    let user = new userView(result["username"],"userdash");
+    let MainList = new MainListView("MainList","MainList","list");
+    MainList.CreateItem(user);
+    MainList.Init();
+  }
 }
 $(function(){
+
+  chrome.cookies.get({"url":"https://ahhhh.com.cn","name":"sessionid"},function (cookie) {
+    console.log(cookie.value);
+  });
   chrome.storage.sync.get(['username'], function(result) {
     if (result["username"]===undefined) {
       console.log("undefined");
@@ -110,7 +130,6 @@ $(function(){
       logview.Init();
     }
     else{
-      console.log("default");
       let user = new userView(result["username"],"userdash");
       let MainList = new MainListView("MainList","MainList","list");
       MainList.CreateItem(user);

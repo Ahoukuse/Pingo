@@ -75,6 +75,9 @@ $(function() {
           commentbox.empty();
         }
         if (res["status"]=="200") {
+          if (res["comment"].length == 0) {
+            $("#Aho-commentbox").off("scroll");
+          }
           for (var i = 0; i < res["comment"].length; i++) {
             addComment(res["comment"][i]["user"],res["comment"][i]["context"],res["comment"][i]["likenumb"],res["comment"][i]["ObjectId"],res["comment"][i]["likestaus"]);
           }
@@ -186,13 +189,13 @@ $(function() {
     }
   });
   $("#Aho-commentbox").on("scroll",function () {
-    var currentpage = $(this).attr("data");
-
-    if ($(this).scrollTop() > currentpage*300 && $(this).scrollTop()%10==0) {
-      var page = Math.ceil($(this).scrollTop()/300);
+    var currentpage =Number($(this).attr("data"));
+    if ($(this).scrollTop() > currentpage*300) {
+      var page = currentpage + 1;
+      $(this).attr("data",page);
       chrome.storage.sync.get(["id"],function (result) {
         reflashCommentBox($("#Aho-commentbox"),$("#Aho-btn-send").attr("data"),result["id"],page,add=true);
-        $(this).attr("data",page);
+
       });
     }
   });
