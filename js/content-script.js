@@ -1,3 +1,46 @@
+function vote(commentid,likestaus,value) {
+  $("#"+commentid+" .Aho-comment-vote p").text(Number($("#"+commentid+" .Aho-comment-vote p").text())+value);
+  var slike = new XMLHttpRequest();
+  slike.onreadystatechange = function(){};
+  slike.open("POST","https://api.ahhhh.com.cn/vote",true);
+  slike.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  chrome.storage.sync.get(["id"],function (result) {
+    slike.send("commentid="+commentid+"&userid="+result["id"]+"&likestaus="+likestaus+"&value="+value);
+  });
+}
+function onlike(){
+  if ($(this).next().next().hasClass("Aho-unliked") && !$(this).hasClass("Aho-liked")){
+    $(this).next().next().removeClass("Aho-unliked");
+    var commentid = $(this).parent().parent().attr("id");
+    vote(commentid,2,2);
+  }
+  else if(!$(this).next().next().hasClass("Aho-unliked") && $(this).hasClass("Aho-liked")){
+    var commentid = $(this).parent().parent().attr("id");
+    vote(commentid,0,-1);
+  }
+  else if(!$(this).next().next().hasClass("Aho-unliked") && !$(this).hasClass("Aho-liked")){
+    var commentid = $(this).parent().parent().attr("id");
+    vote(commentid,1,1);
+  }
+  $(this).toggleClass("Aho-liked");
+}
+function onunlike(){
+  if ($(this).prev().prev().hasClass("Aho-liked") && !$(this).hasClass("Aho-unliked")){
+    $(this).prev().prev().removeClass("Aho-liked");
+    var commentid = $(this).parent().parent().attr("id");
+    vote(commentid,-2,-2);
+  }
+  else if (!$(this).prev().prev().hasClass("Aho-liked") && $(this).hasClass("Aho-unliked")){
+    var commentid = $(this).parent().parent().attr("id");
+    vote(commentid,0,1);
+  }
+  else if(!$(this).prev().prev().hasClass("Aho-liked") && !$(this).hasClass("Aho-unliked")) {
+    //send unlike this
+    var commentid = $(this).parent().parent().attr("id");
+    vote(commentid,-1,-1);
+  }
+  $(this).toggleClass("Aho-unliked");
+}
 $(function() {
 
   var website = '';
@@ -39,7 +82,7 @@ $(function() {
     var xhr = new XMLHttpRequest();
     var context = $("#Aho-textarea").text();
     $("#Aho-textarea").html("<br>");
-    xhr.open("POST","https://api.ahhhh.com.cn/sendcomment",true);
+    xhr.open("POST","http://localhost:2333/sendcomment",true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
@@ -54,16 +97,7 @@ $(function() {
       xhr.send(sendmsg);
     });
   });
-  function vote(commentid,likestaus,value) {
-    $("#"+commentid+" .Aho-comment-vote p").text(Number($("#"+commentid+" .Aho-comment-vote p").text())+value);
-    var slike = new XMLHttpRequest();
-    slike.onreadystatechange = function(){};
-    slike.open("POST","https://api.ahhhh.com.cn/vote",true);
-    slike.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    chrome.storage.sync.get(["id"],function (result) {
-      slike.send("commentid="+commentid+"&userid="+result["id"]+"&likestaus="+likestaus+"&value="+value);
-    });
-  }
+
   function reflashCommentBox(commentbox,website,userid=undefined,page=1,add=false) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
@@ -81,39 +115,6 @@ $(function() {
           for (var i = 0; i < res["comment"].length; i++) {
             addComment(res["comment"][i]["user"],res["comment"][i]["context"],res["comment"][i]["likenumb"],res["comment"][i]["ObjectId"],res["comment"][i]["likestaus"]);
           }
-          $(".Aho-like").on("click",function(){
-            if ($(this).next().next().hasClass("Aho-unliked") && !$(this).hasClass("Aho-liked")){
-              $(this).next().next().removeClass("Aho-unliked");
-              var commentid = $(this).parent().parent().attr("id");
-              vote(commentid,2,2);
-            }
-            else if(!$(this).next().next().hasClass("Aho-unliked") && $(this).hasClass("Aho-liked")){
-              var commentid = $(this).parent().parent().attr("id");
-              vote(commentid,0,-1);
-            }
-            else if(!$(this).next().next().hasClass("Aho-unliked") && !$(this).hasClass("Aho-liked")){
-              var commentid = $(this).parent().parent().attr("id");
-              vote(commentid,1,1);
-            }
-            $(this).toggleClass("Aho-liked");
-          });
-          $(".Aho-unlike").on("click",function(){
-            if ($(this).prev().prev().hasClass("Aho-liked") && !$(this).hasClass("Aho-unliked")){
-              $(this).prev().prev().removeClass("Aho-liked");
-              var commentid = $(this).parent().parent().attr("id");
-              vote(commentid,-2,-2);
-            }
-            else if (!$(this).prev().prev().hasClass("Aho-liked") && $(this).hasClass("Aho-unliked")){
-              var commentid = $(this).parent().parent().attr("id");
-              vote(commentid,0,1);
-            }
-            else if(!$(this).prev().prev().hasClass("Aho-liked") && !$(this).hasClass("Aho-unliked")) {
-              //send unlike this
-              var commentid = $(this).parent().parent().attr("id");
-              vote(commentid,-1,-1);
-            }
-            $(this).toggleClass("Aho-unliked");
-          });
         }
         else if (res["status"]=="404") {
           var notfound = $("<p class='Aho-warning-text'>啥都没得...</p>");
@@ -122,7 +123,7 @@ $(function() {
       }
     };
     chrome.storage.sync.get(["id"],function (result) {
-      var url = "https://api.ahhhh.com.cn/getcomment?website="+website+"&userid="+result["id"]+"&page="+page
+      var url = "http://localhost:2333/getcomment?website="+website+"&userid="+result["id"]+"&page="+page
       xhr.open("GET",url, true);
       console.log(url);
       xhr.send();
@@ -160,6 +161,8 @@ $(function() {
       likedicon.prependTo(comment.children(".Aho-comment-vote"));
     }
     comment.appendTo(commentbox);
+    $("#"+objectid+" .Aho-comment-vote .Aho-like").on("click",onlike);
+    $("#"+objectid+" .Aho-comment-vote .Aho-unlike").on("click",onunlike);
   }
   chrome.runtime.sendMessage({"code":"100"},function (response){});
   chrome.runtime.onMessage.addListener(function(msg,sender,sq){

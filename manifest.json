@@ -1,8 +1,8 @@
 {
     "manifest_version": 2,
-    "name": "Commenter",
-    "version": "1.0.0",
-    "description": "嘿嘿嘿",
+    "name": "Pingo",
+    "version": "0.0.1",
+    "description": "网页评论器插件(Beta)",
 
     "icons":
     {

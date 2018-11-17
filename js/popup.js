@@ -76,6 +76,9 @@ class LogView extends View {
         }
       };
     });
+    $("#signin").on("click",function (){
+      chrome.tabs.create({"url":"https://ahhhh.com.cn/pingo/signin"});
+    });
   }
 }
 
