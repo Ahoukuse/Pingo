@@ -82,7 +82,7 @@ $(function() {
     var xhr = new XMLHttpRequest();
     var context = $("#Aho-textarea").text();
     $("#Aho-textarea").html("<br>");
-    xhr.open("POST","http://localhost:2333/sendcomment",true);
+    xhr.open("POST","https://api.ahhhh.com.cn/sendcomment",true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
@@ -123,7 +123,7 @@ $(function() {
       }
     };
     chrome.storage.sync.get(["id"],function (result) {
-      var url = "http://localhost:2333/getcomment?website="+website+"&userid="+result["id"]+"&page="+page
+      var url = "https://api.ahhhh.com.cn/getcomment?website="+website+"&userid="+result["id"]+"&page="+page
       xhr.open("GET",url, true);
       console.log(url);
       xhr.send();
