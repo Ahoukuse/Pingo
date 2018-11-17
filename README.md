@@ -1,37 +1,25 @@
-# Commenter
+# Pingo
 
-#### 项目介绍
-外挂评论区
-
-#### 软件架构
-软件架构说明
+### 项目介绍
+为你浏览的网页添加评论区
 
 
-#### 安装教程
 
-1. xxxx
-2. xxxx
-3. xxxx
+### 安装教程
 
-#### 使用说明
+1. 点击本页面中的"克隆/下载",在弹出菜单中点击"下载ZIP"
+2. 下载完成后解压文件
+3. 打开Chrome。依次点开菜单>更多工具>扩展管理。在
+扩展管理页面右上角，打开开发者模式。点击"加载已解压的扩展程序"，选择到刚刚下载的文件。
 
-1. xxxx
-2. xxxx
-3. xxxx
+### 使用说明
 
-#### 参与贡献
+1. 注册[Pingo](https://ahhhh.com.cn/pingo/signin "Pingo注册")。**PS:注册请不要使用您常用的密码。**
+2. 在插件上登录。
+
+### 参与贡献
 
 1. Fork 本项目
 2. 新建 Feat_xxx 分支
 3. 提交代码
 4. 新建 Pull Request
-
-
-#### 码云特技
-
-1. 使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2. 码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3. 你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4. [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5. 码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6. 码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
