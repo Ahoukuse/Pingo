@@ -1,3 +1,25 @@
+String.prototype.makeit = function() {
+    var maxlen = 20;
+    var len = 0;
+    var index = 0;
+    for (; index<this.length; index++) {
+        if (this.charCodeAt(index)>127 || this.charCodeAt(index)==94) {
+             len += 2;
+         } else {
+             len ++;
+         }
+         if (len >= maxlen) {
+           break;
+         }
+     }
+     if (index == this.length) {
+       return this
+     }
+     else {
+       return this.substr(0,index)+"...";
+     }
+
+}
 function vote(commentid,likestaus,value) {
   $("#"+commentid+" .Aho-comment-vote p").text(Number($("#"+commentid+" .Aho-comment-vote p").text())+value);
   var slike = new XMLHttpRequest();
@@ -51,7 +73,7 @@ $(function() {
   var sendbox = $("<div></div>");
   var commentbox = $("<div></div>");
   var sendbtn = $("<button id='Aho-btn-send'type='button' name='Aho-btn-send'>咻咻！</button>");
-  var textarea = $("<div id='Aho-textarea'><br></div>");
+  var textarea = $("<div id='Aho-textarea' class='Aho-textarea' ><br></div>");
   var icon = $("<img></img>");
 
   sendbox.attr("id","Aho-sendbox");
@@ -81,7 +103,6 @@ $(function() {
     var website =  $(this).attr("data");
     var xhr = new XMLHttpRequest();
     var context = $("#Aho-textarea").text();
-    $("#Aho-textarea").html("<br>");
     xhr.open("POST","https://api.ahhhh.com.cn/sendcomment",true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function() {
@@ -91,11 +112,14 @@ $(function() {
         reflashCommentBox($("#Aho-commentbox"),website);
       }
     };
-    chrome.storage.sync.get(["id"],function (result) {
-      let sendmsg = "userid="+result["id"]+"&website="+website+"&context="+context
-      console.log(sendmsg);
-      xhr.send(sendmsg);
-    });
+    if (context != "") {
+      $("#Aho-textarea").html("<br>");
+      chrome.storage.sync.get(["id"],function (result) {
+        let sendmsg = "userid="+result["id"]+"&website="+website+"&context="+context
+        console.log(sendmsg);
+        xhr.send(sendmsg);
+      });
+    }
   });
 
   function reflashCommentBox(commentbox,website,userid=undefined,page=1,add=false) {
@@ -130,6 +154,7 @@ $(function() {
     });
   }
   function addComment(username,context,likenumb,objectid,likestaus) {
+    username = username.makeit();
     var svgicon = $("<svg width='50' height='50'><rect x='0' y='0' rx='10' ry='10' width='50' height='50' style='fill:blue;stroke:black;stroke-width:1;opacity:0.4'/>你的浏览器还不支持SVG</svg>");
     var likeicon = $("<div class='Aho-like'></div>");
     var likedicon = $("<div class='Aho-like Aho-liked'></div>");
@@ -139,10 +164,10 @@ $(function() {
 
     //var unlikedicon = $("<img class='Aho-votebtn' src='https://png.icons8.com/ios/50/666666/sort-down-filled.png'></img>");
     var likenumber = $("<p class='Aho-likenumber'></p>");
-    var comment = $("<div class='Aho-comment'><div class='Aho-profileimg'></div><div class='Aho-comment-context'><p class='Aho-username-p'></p><p class='Aho-comment-p'></p></div><div class='Aho-comment-vote'></div></div>")
+    var comment = $("<div class='Aho-comment'><div class='Aho-profileimg'></div><div class='Aho-comment-context'><div class='Aho-username'><p class='Aho-username-p'></p></div><div class='Aho-comment'><p class='Aho-comment-p'></p></div></div><div class='Aho-comment-vote'></div></div>")
     comment.attr("id",objectid);
-    comment.children(".Aho-comment-context").children(".Aho-username-p").text(username);
-    comment.children(".Aho-comment-context").children(".Aho-comment-p").text(context);
+    comment.children(".Aho-comment-context").children(".Aho-username").children(".Aho-username-p").text(username);
+    comment.children(".Aho-comment-context").children(".Aho-comment").children(".Aho-comment-p").text(context);
     likenumber.text(likenumb);
     svgicon.prependTo(comment.children(".Aho-profileimg"));
     if (likestaus == 0) {
@@ -200,6 +225,14 @@ $(function() {
         reflashCommentBox($("#Aho-commentbox"),$("#Aho-btn-send").attr("data"),result["id"],page,add=true);
 
       });
+    }
+  });
+  chrome.storage.sync.get(["username"],function (result) {
+    if (result["username"]===undefined) {
+      $("#Aho-textarea").removeClass("Aho-textarea");
+      $("#Aho-textarea").attr("contenteditable","false");
+      $("#Aho-textarea").addClass("Aho-textarea-baffle");
+      $("#Aho-btn-send").off("click");
     }
   });
 })

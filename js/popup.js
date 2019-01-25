@@ -28,10 +28,11 @@ class MainListView extends View {
     for (var i = 0; i < this.ItemArray.length; i++) {
       //let View = $("#"+ViewArray[i].ViewLocal);
       let Pointer = this.ItemArray[i];
-      if($("#"+Pointer.ViewName).length == 0) {
+      let PointerO = $("#"+Pointer.ViewName);
+      if(PointerO.length == 0) {
         let prediv = $("<div></div>");
         let element = $("<p></p>");
-        element.html(Pointer.ViewName);
+        element.text(Pointer.Context);
         element.attr("id",Pointer.ViewName);
         element.appendTo(prediv);
         prediv.appendTo(pre);
@@ -42,9 +43,7 @@ class MainListView extends View {
         });
       }
       else {
-        console.log("nonn");
-
-        $("#"+this.ViewName).text(Pointer.ViewName);
+        PointerO.text(Pointer.Context);
       }
     }
   }
@@ -67,7 +66,7 @@ class LogView extends View {
           if (res["status"]=="200") {
             chrome.storage.sync.set({"username":res["user"]["username"],"id":res["user"]["id"]},function () {
                   $("#LogView").css("display","none");
-                  let user = new userView(res["user"]["username"],"userdash");
+                  let user = new userView("user-view","userdash",res["user"]["username"]);
                   let MainList = new MainListView("MainList","MainList","list");
                   MainList.CreateItem(user);
                   MainList.Init();
@@ -83,8 +82,9 @@ class LogView extends View {
 }
 
 class userView extends View {
-  constructor(ViewName,ViewLocal){
-    super(ViewName,ViewLocal)
+  constructor(ViewName,ViewLocal,Context){
+    super(ViewName,ViewLocal);
+    this.Context = Context;
   }
   Init(){
     chrome.storage.sync.get(['username'], function(result){
@@ -109,34 +109,22 @@ class userView extends View {
 
   }
 }
+
 function reflashList(result) {
   if (result["username"]===undefined) {
     let logview = new LogView("logview","LogView");
     logview.Init();
   }
   else{
-    let user = new userView(result["username"],"userdash");
+    let user = new userView("user-view","userdash",result["username"]);
     let MainList = new MainListView("MainList","MainList","list");
     MainList.CreateItem(user);
     MainList.Init();
   }
 }
-$(function(){
 
-  chrome.cookies.get({"url":"https://ahhhh.com.cn","name":"sessionid"},function (cookie) {
-    console.log(cookie.value);
-  });
-  chrome.storage.sync.get(['username'], function(result) {
-    if (result["username"]===undefined) {
-      console.log("undefined");
-      let logview = new LogView("logview","LogView");
-      logview.Init();
-    }
-    else{
-      let user = new userView(result["username"],"userdash");
-      let MainList = new MainListView("MainList","MainList","list");
-      MainList.CreateItem(user);
-      MainList.Init();
-    }
+$(function(){
+  chrome.storage.sync.get(['username'],function(result) {
+    reflashList(result)
   });
 });

@@ -16,10 +16,9 @@
   width: 100%;
   height: 75%;
 }
-#Aho-textarea {
+.Aho-textarea {
   width:  94%;
   height:60%;
-  background-color: white;
   padding: 5px;
   margin-left: auto;
   margin-right: auto;
@@ -31,18 +30,34 @@
   font-size: 24px;
   overflow-y: auto;
 }
-#Aho-textarea p {
+.Aho-textarea p {
   margin-top: 3px;
   margin-bottom: 3px;
   font-size: 24px;
 }
-#Aho-textarea:focus {
+.Aho-textarea:focus {
   border-width: 1px;
   border-color: blue;
 }
-#Aho-textarea:hover {
+.Aho-textarea:hover {
   border-width: 1px;
   border-color: blue;
+}
+.Aho-textarea-baffle {
+  background-color: #e5e9ef;
+  cursor: default;
+  width:  94%;
+  height:60%;
+  padding: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 5px;
+  border-style: groove;
+  border-color: #e5e9ef;
+  border-width: 1px;
+  outline:none;
+  font-size: 24px;
+  overflow-y: auto;
 }
 #Aho-btn-send {
   cursor: pointer;
@@ -121,12 +136,14 @@
     background-color: white;
 }
 p.Aho-username-p {
+    color: black;
     overflow: hidden;
     font-size: 20px;
     margin-top: 5px;
     margin-bottom: 5px;
 }
 p.Aho-comment-p {
+    color: black;
     overflow: hidden;
     font-size: 15px;
 }
@@ -181,4 +198,8 @@ p.Aho-warning-text {
 }
 .Aho-unliked {
   border-top: 15px solid #9999ff;
+}
+.Aho-username {
+    height: 35%;
+    overflow: hidden;
 }

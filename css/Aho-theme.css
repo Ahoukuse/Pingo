@@ -74,7 +74,7 @@
       margin-right: auto;
     }
 }
-button {
+.button {
   cursor: pointer;
   color: black;
   font-size: 30px;
@@ -88,7 +88,27 @@ button {
   outline: none;
   border-image:none;
 }
-button:hover {
+.button:hover {
+  background-color: #1da1f2;
+  color: #353535;
+  box-shadow: 0px 1.5px 0px #888888;
+  border-radius:2px;
+}
+.button-sm {
+  cursor: pointer;
+  color: black;
+  font-size: 15px;
+  width: 80px;
+  height: 30px;
+  border-width: 1px;
+  border-style: groove;
+  background-color: white;
+  border-color: #ee6e73;
+  transition: all,0.6s;
+  outline: none;
+  border-image:none;
+}
+.button-sm:hover {
   background-color: #1da1f2;
   color: #353535;
   box-shadow: 0px 1.5px 0px #888888;

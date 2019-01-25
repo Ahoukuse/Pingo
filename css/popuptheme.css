@@ -24,17 +24,22 @@ p:hover {
     text-align: -webkit-center;
 }
 .icon {
+    border-width: 1px;
+    border-style: solid;
     background-color: white;
     width: 62px;
     border-radius: 7px;
 }
 .userlabel label {
-  height: 10px;
-  font-size: 30px;
-  margin-top: 0px;
-  margin-bottom: 0px;
+    height: 10px;
+    font-size: 30px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 .userlabel {
+    height: 40px;
+    width: 100%;
+    overflow: hidden;
     position: relative;
     top: -5px;
 }
@@ -45,6 +50,7 @@ p:hover {
     padding-bottom: 10px;
 }
 .black-btn {
+  cursor: pointer;
   width: 32px;
   height: 32px;
   background-image:url("/img/icons8-long-arrow-left-32.png");
@@ -52,6 +58,7 @@ p:hover {
   background-repeat: no-repeat;
   background-color: inherit;
   border-style: none;
+  box-shadow: 0px 0px 0px white;
 }
 .black-btn:hover{
   background-color: inherit;
