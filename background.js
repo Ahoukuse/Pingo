@@ -25,7 +25,6 @@ chrome.runtime.onMessage.addListener(function(msg,sender,sq){
 chrome.storage.sync.get(["notificode"],function (result) {
   if (result["notificode"]===undefined) {
     console.log("notificode is undefined");
-    //http://localhost:2333/notif?timestamp=1544494558.224312
     var timestamp=new Date();
     timestamp = timestamp/1000;
     chrome.storage.sync.set({"notificode":timestamp});
@@ -39,12 +38,24 @@ chrome.storage.sync.get(["notificode"],function (result) {
       if (this.readyState == 4 && this.status == 200) {
         var res = JSON.parse(xhr.responseText);
         if (res["notif"].length != 0) {
-          chrome.storage.sync.set({"notificode":res["notif"][0]["timestamp"]+1});
+          chrome.storage.sync.set({"notificode":res["notif"][0]["timestamp"]+5});
           for (var i = 0; i < res["notif"].length; i++) {
-            chrome.notifications.create({"type":"basic",
-                                      "iconUrl":chrome.runtime.getURL("/img/toys.png"),
-                                      "message":res["notif"][i]["mesg"],
-                                      "title":res["notif"][i]["title"]});
+            switch (res["notif"][i]["type"]) {
+              case "text":
+                chrome.notifications.create({"type":"basic",
+                                          "iconUrl":chrome.runtime.getURL("/img/toys.png"),
+                                          "message":res["notif"][i]["mesg"],
+                                          "title":res["notif"][i]["title"]});
+                break;
+              case "OK_Button":
+                chrome.notifications.create({"type":"basic",
+                                          "iconUrl":chrome.runtime.getURL("/img/toys.png"),
+                                          "message":res["notif"][i]["mesg"],
+                                          "title":res["notif"][i]["title"],
+                                          "buttons":[{"title":"确定"}]});
+                break;
+            }
+
           }
         }
         else {
@@ -54,4 +65,8 @@ chrome.storage.sync.get(["notificode"],function (result) {
     };
     xhr.send();
   }
+});
+chrome.notifications.onButtonClicked.addListener(function (notificationId,buttonIndex) {
+  console.log(buttonIndex);
+  chrome.notifications.clear(notificationId);
 });

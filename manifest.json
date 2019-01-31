@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Pingo",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "网页评论器插件(Beta)",
 
     "icons":
@@ -18,7 +18,7 @@
     "browser_action":
     {
         "default_icon": "img/toys.png",
-        "default_title": "Hi,You!",
+        "default_title": "在这里登录！",
         "default_popup": "popup.html"
     },
     "content_scripts":[
@@ -36,8 +36,7 @@
           "cookies",
           "notifications",
           "https://api.ahhhh.com.cn/",
-          "https://ahhhh.com.cn/",
-          "http://localhost:2333/"
+          "https://ahhhh.com.cn/"
     ],
     "options_ui": {
     "page": "options.html",

@@ -17,7 +17,8 @@
   height: 75%;
 }
 .Aho-textarea {
-  width:  94%;
+  color: black;
+  width: 95%;
   height:60%;
   padding: 5px;
   margin-left: auto;
@@ -30,6 +31,10 @@
   font-size: 24px;
   overflow-y: auto;
 }
+.Aho-textarea:focus{
+  box-shadow: inset 0 0 0 1px rgba(27,149,224,0.7);
+}
+
 .Aho-textarea p {
   margin-top: 3px;
   margin-bottom: 3px;
@@ -116,30 +121,37 @@
 }
 .Aho-comment {
     text-align: left;
-    overflow: hidden;
+    overflow: visible;
     display: -webkit-inline-box;
     min-height: 100px;
     width: 100%;
+    min-height: 50px;
     border-color: white;
     border-bottom-style: groove;
     border-bottom-width: 1px;
     border-top-color: #888888;
 }
+.Aho-text-container{
+    height: 65px;
+    overflow: hidden;
+}
 .Aho-comment p {
   margin-top: 0px;
+  /*min-height: 65px;*/
 }
 .Aho-profileimg {
     text-align: center;
-    height: 100px;
+    height: 94px;
     width: 20%;
     padding-left: 5px;
-    padding-top: 10px;
+    padding-top: 0px;
+    margin-top: 6px;
     background-color: white;
 }
 .Aho-comment-vote {
     padding-top: 5px;
     width: 18%;
-    height: 100px;
+    height: 95px;
     text-align: -webkit-center;
     background-color: white;
 }
@@ -150,6 +162,10 @@
     width: 60%;
     background-color: white;
 }
+.Aho-numberbox{
+  position: relative;
+}
+
 p.Aho-username-p {
     color: black;
     overflow: hidden;
@@ -159,8 +175,9 @@ p.Aho-username-p {
 }
 p.Aho-comment-p {
     color: black;
-    overflow: hidden;
+    overflow:visible;
     font-size: 15px;
+    height: 50px;
 }
 img.Aho-votebtn {
     width: 35px;
@@ -172,9 +189,11 @@ p.Aho-likenumber {
     color: #636363;
     margin-bottom: 0;
     font-size: 25px;
+    height: 30px;
 }
 
 p.Aho-warning-text {
+    color: black;
     padding-top: 10px;
     font-size: 30px;
     text-align: -webkit-center;
@@ -223,4 +242,9 @@ p.Aho-warning-text {
   font-size: 25px;
   font-style: normal;
   color: #777777;
+}
+.Aho-usericon {
+  height: 50px;
+  width: auto;
+  border-radius: 8px;
 }

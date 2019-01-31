@@ -64,7 +64,7 @@ class LogView extends View {
         if (this.readyState == 4 && this.status == 200) {
           var res = JSON.parse(xhr.responseText);
           if (res["status"]=="200") {
-            chrome.storage.sync.set({"username":res["user"]["username"],"id":res["user"]["id"]},function () {
+            chrome.storage.sync.set({"username":res["user"]["username"],"img":res["user"]["img"],"id":res["user"]["id"]},function () {
                   $("#LogView").css("display","none");
                   let user = new userView("user-view","userdash",res["user"]["username"]);
                   let MainList = new MainListView("MainList","MainList","list");
@@ -76,7 +76,7 @@ class LogView extends View {
       };
     });
     $("#signin").on("click",function (){
-      chrome.tabs.create({"url":"https://ahhhh.com.cn/pingo/signin"});
+      chrome.tabs.create({"url":"https://api.weibo.com/oauth2/authorize?client_id=3627404072&redirect_uri=https://ahhhh.com.cn/pingo/signin"});
     });
   }
 }
@@ -87,8 +87,9 @@ class userView extends View {
     this.Context = Context;
   }
   Init(){
-    chrome.storage.sync.get(['username'], function(result){
+    chrome.storage.sync.get(['username',"img"], function(result){
       $("#usernamelabel").text(result["username"]);
+      $("#usericon").attr("src",result["img"]);
     });
     $("#logout").on("click",{"view":this.ViewLocal},function (event) {
       chrome.storage.sync.remove(["username","id"]);

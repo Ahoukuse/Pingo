@@ -20,75 +20,6 @@ String.prototype.makeit = function() {
      }
 
 }
-function reflashCommentBox(commentbox,islogin,website,userid=undefined,page=1,add=false) {
-  var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      var res = JSON.parse(xhr.responseText);
-      commentbox.attr("data",page);
-      console.log(res);
-      if (!add) {
-        commentbox.empty();
-      }
-      if (res["status"]=="200") {
-        if (res["comment"].length == 0) {
-          $("#Aho-commentbox").off("scroll");
-        }
-        for (var i = 0; i < res["comment"].length; i++) {
-          addComment(commentbox,islogin,res["comment"][i]["user"],res["comment"][i]["context"],res["comment"][i]["likenumb"],res["comment"][i]["ObjectId"],res["comment"][i]["likestaus"]);
-        }
-      }
-      else if (res["status"]=="404") {
-        var notfound = $("<p class='Aho-warning-text'>啥都没得...</p>");
-        notfound.appendTo(commentbox);
-      }
-    }
-  };
-  chrome.storage.sync.get(["id"],function (result) {
-    var url = "https://api.ahhhh.com.cn/getcomment?website="+website+"&userid="+result["id"]+"&page="+page
-    xhr.open("GET",url, true);
-    console.log(url);
-    xhr.send();
-  });
-}
-function addComment(commentbox,islogin,username,context,likenumb,objectid,likestaus) {
-  username = username.makeit();
-  var svgicon = $("<svg width='50' height='50'><rect x='0' y='0' rx='10' ry='10' width='50' height='50' style='fill:blue;stroke:black;stroke-width:1;opacity:0.4'/>你的浏览器还不支持SVG</svg>");
-  var likeicon = $("<div class='Aho-like'></div>");
-  var likedicon = $("<div class='Aho-like Aho-liked'></div>");
-  //var likedicon = $("<img class='Aho-votebtn' src='https://png.icons8.com/ios/50/666666/sort-up-filled.png'></img>");
-  var unlikeicon = $("<div class='Aho-unlike'></div>");
-  var unlikedicon = $("<div class='Aho-unlike Aho-unliked'></div>");
-
-  //var unlikedicon = $("<img class='Aho-votebtn' src='https://png.icons8.com/ios/50/666666/sort-down-filled.png'></img>");
-  var likenumber = $("<p class='Aho-likenumber'></p>");
-  var comment = $("<div class='Aho-comment'><div class='Aho-profileimg'></div><div class='Aho-comment-context'><div class='Aho-username'><p class='Aho-username-p'></p></div><div class='Aho-comment'><p class='Aho-comment-p'></p></div></div><div class='Aho-comment-vote'></div></div>")
-  comment.attr("id",objectid);
-  comment.children(".Aho-comment-context").children(".Aho-username").children(".Aho-username-p").text(username);
-  comment.children(".Aho-comment-context").children(".Aho-comment").children(".Aho-comment-p").text(context);
-  likenumber.text(likenumb);
-  svgicon.prependTo(comment.children(".Aho-profileimg"));
-  if (likestaus == 0) {
-    unlikeicon.prependTo(comment.children(".Aho-comment-vote"));
-    likenumber.prependTo(comment.children(".Aho-comment-vote"));
-    likeicon.prependTo(comment.children(".Aho-comment-vote"));
-  }
-  else if (likestaus < 0) {
-    unlikedicon.prependTo(comment.children(".Aho-comment-vote"));
-    likenumber.prependTo(comment.children(".Aho-comment-vote"));
-    likeicon.prependTo(comment.children(".Aho-comment-vote"));
-  }
-  else if (likestaus > 0) {
-    unlikeicon.prependTo(comment.children(".Aho-comment-vote"));
-    likenumber.prependTo(comment.children(".Aho-comment-vote"));
-    likedicon.prependTo(comment.children(".Aho-comment-vote"));
-  }
-  comment.appendTo(commentbox);
-  if (islogin) {
-    $("#"+objectid+" .Aho-comment-vote .Aho-like").on("click",onlike);
-    $("#"+objectid+" .Aho-comment-vote .Aho-unlike").on("click",onunlike);
-  }
-}
 class SideView {
   constructor(website,islogin) {
     this.website = website
@@ -97,6 +28,7 @@ class SideView {
     this.sidebtn = $("<div></div>");
     var sendbox = $("<div></div>");
     var commentbox = $("<div></div>");
+
     var sendbtn = $("<button id='Aho-btn-send'type='button' name='Aho-btn-send'>咻咻！</button>");
     var textarea = $("<div id='Aho-textarea' ><br></div>");
     var icon = $("<img></img>");
@@ -121,7 +53,7 @@ class SideView {
     this.sideview.attr("id","Aho-sideview");
     commentbox.prependTo(this.sideview);
     sendbox.prependTo(this.sideview);
-
+    this.commentBoxHand = new CommentBox(commentbox,this.islogin,this.website);
     this.sidebtn.on("click",function () {
       if ($("#Aho-sidebtn").attr("data") == "open") {
         $("#Aho-sideview").animate({left:"-400px"});
@@ -137,23 +69,14 @@ class SideView {
       }
     });
 
-    commentbox.on("scroll",function () {
-      var currentpage =Number($(this).attr("data"));
-      if ($(this).scrollTop() > currentpage*300) {
-        var page = currentpage + 1;
-        $(this).attr("data",page);
-        chrome.storage.sync.get(["id"],function (result) {
-          reflashCommentBox($("#Aho-commentbox"),islogin,website,result["id"],page,true);
 
-        });
-      }
-    });
+
 
     if (islogin) {
       textarea.addClass("Aho-textarea");
       sendbtn.addClass("Aho-btn-send");
       textarea.attr("contentEditable","true");
-      sendbtn.on("click",function () {
+      sendbtn.on("click",this.commentBoxHand,function (event) {
         var website =  $(this).attr("data");
         var xhr = new XMLHttpRequest();
         var context = $("#Aho-textarea").text();
@@ -163,7 +86,7 @@ class SideView {
           if (this.readyState == 4 && this.status == 200) {
             var res = JSON.parse(xhr.responseText);
             console.log(res);
-            reflashCommentBox($("#Aho-commentbox"),islogin,website);
+            event.data.reflashCommentBox();
           }
         };
         if (context != "") {
@@ -195,55 +118,157 @@ class SideView {
   showOn(position) {
     this.sideview.prependTo(position);
     this.sidebtn.prependTo(position);
-    reflashCommentBox($("#Aho-commentbox"),this.islogin,this.website);
+
+    this.commentBoxHand.reflashCommentBox();
   }
 }
-function vote(commentid,likestaus,value) {
-  $("#"+commentid+" .Aho-comment-vote p").text(Number($("#"+commentid+" .Aho-comment-vote p").text())+value);
-  var slike = new XMLHttpRequest();
-  slike.onreadystatechange = function(){};
-  slike.open("POST","https://api.ahhhh.com.cn/vote",true);
-  slike.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  chrome.storage.sync.get(["id"],function (result) {
-    slike.send("commentid="+commentid+"&userid="+result["id"]+"&likestaus="+likestaus+"&value="+value);
-  });
-}
-function onlike(){
-  if ($(this).next().next().hasClass("Aho-unliked") && !$(this).hasClass("Aho-liked")){
-    $(this).next().next().removeClass("Aho-unliked");
-    var commentid = $(this).parent().parent().attr("id");
-    vote(commentid,2,2);
+class CommentBox {
+  constructor(commentbox,islogin=false,website,userid=undefined) {
+    this.commentbox = commentbox;
+    this.islogin = islogin
+    this.website= website
+    this.userid = userid
+
+    this.commentbox.on("scroll",this,function (event) {
+      var currentpage =Number($(this).attr("data"));
+      if ($(this).scrollTop() > currentpage*300) {
+        var page = currentpage + 1;
+        $(this).attr("data",page);
+        chrome.storage.sync.get(["id"],function (result) {
+          event.data.reflashCommentBox(event.data,page,true);
+
+        });
+      }
+    });
+
   }
-  else if(!$(this).next().next().hasClass("Aho-unliked") && $(this).hasClass("Aho-liked")){
-    var commentid = $(this).parent().parent().attr("id");
-    vote(commentid,0,-1);
+
+  addComment(username,iconurl,context,likenumb,objectid,likestaus) {
+    let usernameshort = username.makeit();
+    var icon = $("<img class='Aho-usericon' src="+iconurl+" alt=''>");
+    var likeicon = $("<div class='Aho-like'></div>");
+    var likedicon = $("<div class='Aho-like Aho-liked'></div>");
+    //var likedicon = $("<img class='Aho-votebtn' src='https://png.icons8.com/ios/50/666666/sort-up-filled.png'></img>");
+    var unlikeicon = $("<div class='Aho-unlike'></div>");
+    var unlikedicon = $("<div class='Aho-unlike Aho-unliked'></div>");
+
+    //var unlikedicon = $("<img class='Aho-votebtn' src='https://png.icons8.com/ios/50/666666/sort-down-filled.png'></img>");
+    var likenumber = $("<p class='Aho-likenumber'></p>");
+    var likenumberbox = $("<div class='Aho-numberbox'></div>");
+    var comment = $("<div class='Aho-comment'><div class='Aho-profileimg'></div><div class='Aho-comment-context'><div class='Aho-username'><p class='Aho-username-p'></p></div><div class='Aho-text-container'><p class='Aho-comment-p'></p></div></div><div class='Aho-comment-vote'></div></div>")
+    comment.attr("id",objectid);
+    comment.children(".Aho-comment-context").children(".Aho-username").children(".Aho-username-p").text(usernameshort);
+    comment.children(".Aho-comment-context").children(".Aho-username").children(".Aho-username-p").attr("title",username);
+    comment.children(".Aho-comment-context").children(".Aho-text-container").children(".Aho-comment-p").text(context);
+    likenumber.text(likenumb);
+    likenumber.prependTo(likenumberbox);
+    icon.prependTo(comment.children(".Aho-profileimg"));
+    if (likestaus == 0) {
+      unlikeicon.prependTo(comment.children(".Aho-comment-vote"));
+      likenumberbox.prependTo(comment.children(".Aho-comment-vote"));
+      likeicon.prependTo(comment.children(".Aho-comment-vote"));
+    }
+    else if (likestaus < 0) {
+      unlikedicon.prependTo(comment.children(".Aho-comment-vote"));
+      likenumberbox.prependTo(comment.children(".Aho-comment-vote"));
+      likeicon.prependTo(comment.children(".Aho-comment-vote"));
+    }
+    else if (likestaus > 0) {
+      unlikeicon.prependTo(comment.children(".Aho-comment-vote"));
+      likenumberbox.prependTo(comment.children(".Aho-comment-vote"));
+      likedicon.prependTo(comment.children(".Aho-comment-vote"));
+    }
+    comment.appendTo(this.commentbox);
+    if (this.islogin) {
+      $("#"+objectid+" .Aho-comment-vote .Aho-like").on("click",this,this.onlike);
+      $("#"+objectid+" .Aho-comment-vote .Aho-unlike").on("click",this,this.onunlike);
+    }
+    else{
+      //在这里实现未登录时CommentBox的逻辑
+
+    }
   }
-  else if(!$(this).next().next().hasClass("Aho-unliked") && !$(this).hasClass("Aho-liked")){
-    var commentid = $(this).parent().parent().attr("id");
-    vote(commentid,1,1);
+  reflashCommentBox(CommentBoxHand=this,page=1,isadd=false) {
+    console.log(this.website);
+    console.log(this.commentbox);
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        let commentbox = $("#Aho-commentbox");
+        var res = JSON.parse(xhr.responseText);
+        commentbox.attr("data",page);
+        console.log(res);
+        if (!isadd) {
+          commentbox.empty();
+        }
+        if (res["status"]=="200") {
+          if (res["comment"].length == 0) {
+            commentbox.off("scroll");
+          }
+          for (var i = 0; i < res["comment"].length; i++) {
+            CommentBoxHand.addComment(res["comment"][i]["user"],res["comment"][i]["img"],res["comment"][i]["context"],res["comment"][i]["likenumb"],res["comment"][i]["ObjectId"],res["comment"][i]["likestaus"]);
+          }
+        }
+        else if (res["status"]=="404") {
+          var notfound = $("<p class='Aho-warning-text'>啥都没得...</p>");
+          notfound.appendTo(CommentBoxHand.commentbox);
+        }
+      }
+    };
+    chrome.storage.sync.get(["id"],function (result) {
+      var url = "https://api.ahhhh.com.cn/getcomment?website="+CommentBoxHand.website+"&userid="+result["id"]+"&page="+page
+      xhr.open("GET",url, true);
+      console.log(url);
+      xhr.send();
+    });
   }
-  $(this).toggleClass("Aho-liked");
-}
-function onunlike(){
-  if ($(this).prev().prev().hasClass("Aho-liked") && !$(this).hasClass("Aho-unliked")){
-    $(this).prev().prev().removeClass("Aho-liked");
-    var commentid = $(this).parent().parent().attr("id");
-    vote(commentid,-2,-2);
+  vote(commentid,likestaus,value) {
+    $("#"+commentid+" .Aho-comment-vote p").text(Number($("#"+commentid+" .Aho-comment-vote p").text())+value);
+    var slike = new XMLHttpRequest();
+    slike.onreadystatechange = function(){};
+    slike.open("POST","https://api.ahhhh.com.cn/vote",true);
+    slike.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    chrome.storage.sync.get(["id"],function (result) {
+      slike.send("commentid="+commentid+"&userid="+result["id"]+"&likestaus="+likestaus+"&value="+value);
+    });
   }
-  else if (!$(this).prev().prev().hasClass("Aho-liked") && $(this).hasClass("Aho-unliked")){
-    var commentid = $(this).parent().parent().attr("id");
-    vote(commentid,0,1);
+  onlike(event){
+    if ($(this).next().next().hasClass("Aho-unliked") && !$(this).hasClass("Aho-liked")){
+      $(this).next().next().removeClass("Aho-unliked");
+      var commentid = $(this).parent().parent().attr("id");
+      event.data.vote(commentid,2,2);
+    }
+    else if(!$(this).next().next().hasClass("Aho-unliked") && $(this).hasClass("Aho-liked")){
+      var commentid = $(this).parent().parent().attr("id");
+      event.data.vote(commentid,0,-1);
+    }
+    else if(!$(this).next().next().hasClass("Aho-unliked") && !$(this).hasClass("Aho-liked")){
+      var commentid = $(this).parent().parent().attr("id");
+      event.data.vote(commentid,1,1);
+    }
+    $(this).toggleClass("Aho-liked");
   }
-  else if(!$(this).prev().prev().hasClass("Aho-liked") && !$(this).hasClass("Aho-unliked")) {
-    //send unlike this
-    var commentid = $(this).parent().parent().attr("id");
-    vote(commentid,-1,-1);
+  onunlike(event){
+    if ($(this).prev().prev().hasClass("Aho-liked") && !$(this).hasClass("Aho-unliked")){
+      $(this).prev().prev().removeClass("Aho-liked");
+      var commentid = $(this).parent().parent().attr("id");
+      event.data.vote(commentid,-2,-2);
+    }
+    else if (!$(this).prev().prev().hasClass("Aho-liked") && $(this).hasClass("Aho-unliked")){
+      var commentid = $(this).parent().parent().attr("id");
+      event.data.vote(commentid,0,1);
+    }
+    else if(!$(this).prev().prev().hasClass("Aho-liked") && !$(this).hasClass("Aho-unliked")) {
+      //send unlike this
+      var commentid = $(this).parent().parent().attr("id");
+      event.data.vote(commentid,-1,-1);
+    }
+    $(this).toggleClass("Aho-unliked");
   }
-  $(this).toggleClass("Aho-unliked");
 }
 
 $(function() {
-  chrome.runtime.sendMessage({"code":"100"},function (response){});
+  chrome.runtime.sendMessage({"code":"100"});
   chrome.runtime.onMessage.addListener(function(msg,sender,sq){
     console.log(msg["website"]);
     chrome.storage.sync.get(["username"],function (result) {

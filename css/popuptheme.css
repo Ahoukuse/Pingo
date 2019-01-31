@@ -8,8 +8,8 @@ p:hover {
 }
 
 #usericon {
-  height: 60px;
-  width: auto;
+  height: -webkit-fill-available;
+  width: -webkit-fill-available;
 }
 
 .dash-head {
@@ -24,11 +24,12 @@ p:hover {
     text-align: -webkit-center;
 }
 .icon {
-    border-width: 1px;
-    border-style: solid;
-    background-color: white;
-    width: 62px;
-    border-radius: 7px;
+  border-width: 1px;
+  border-style: solid;
+  background-color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 7px;
 }
 .userlabel label {
     height: 10px;
