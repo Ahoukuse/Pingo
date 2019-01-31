@@ -14,12 +14,12 @@
 
 ### 使用说明
 
-1. 注册[Pingo](https://ahhhh.com.cn/pingo/signin "Pingo注册")。**PS:注册请不要使用您常用的密码。**
+1. 在插件上注册。**PS:注册请不要使用您常用的密码。**
 2. 在插件上登录。
+（废话）
 
 ### 参与贡献
 
 1. Fork 本项目
 2. 新建 Feat_xxx 分支
 3. 提交代码
-4. 新建 Pull Request
